@@ -1,0 +1,19 @@
+{
+    "name": "leekman/authenticate-as-anyone",
+    "description": "Package that allows you to authenticate as anyone, see readme for more informations",
+    "require": {},
+    "authors": [
+        {
+            "name": "Leekman",
+            "email": "estreguil.valentin@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Leekman\\AuthenticateAsAnyone\\AuthenticateAsAnyoneServiceProvider"
+            ]
+        }
+    }
+}
