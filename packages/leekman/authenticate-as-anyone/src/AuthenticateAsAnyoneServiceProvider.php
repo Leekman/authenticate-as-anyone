@@ -12,10 +12,9 @@ class AuthenticateAsAnyoneServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/config/auth-as-anyone.php', 'AuthAsAnyone');
-        $this->loadViewsFrom(__DIR__.'/views', 'authenticate-as-anyone');
+        $this->mergeConfigFrom(__DIR__.'/../config/auth-as-anyone.php', 'AuthAsAnyone');
 
         include __DIR__.'/routes.php';
     }
@@ -26,11 +25,31 @@ class AuthenticateAsAnyoneServiceProvider extends ServiceProvider
      * @return void
      * @throws BindingResolutionException
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app->make(AuthenticateAsAnyoneController::class);
-        $this->publishes([
-            __DIR__.'/config/auth-as-anyone.php' => config_path('auth-as-anyone.php')
-        ]);
+
+        $viewPath = __DIR__.'/../resources/views';
+        if ($this->app->has('view')) {
+            $this->loadViewsFrom($viewPath, 'authenticate-as-anyone');
+        }
+
+
+        //publish config
+        $configPath = __DIR__.'/../config/auth-as-anyone.php';
+        if (function_exists('config_path')) {
+            $publishPath = config_path('auth-as-anyone.php');
+        } else {
+            $publishPath = base_path('config/auth-as-anyone.php');
+        }
+        $this->publishes([$configPath => $publishPath], 'config');
+
+        //publish views
+        if (function_exists('resource_path')) {
+            $publishPath = resource_path('views/vendor/auth-as-anyone');
+        } else {
+            $publishPath = base_path('resources/views/vendor/auth-as-anyone');
+        }
+        $this->publishes([$viewPath => $publishPath]);
     }
 }

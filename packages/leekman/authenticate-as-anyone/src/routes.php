@@ -1,7 +1,7 @@
 <?php
 
 Route::namespace('Leekman\AuthenticateAsAnyone')
-    ->prefix(config('AuthenticateAsAnyoneConfig.route-prefix'))
+    ->prefix(config('AuthAsAnyone.route-prefix'))
     ->middleware(array_merge(['web'], config('AuthAsAnyone.middlewares')))
     ->group(function ()
     {
