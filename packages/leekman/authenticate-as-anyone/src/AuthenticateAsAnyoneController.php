@@ -8,22 +8,26 @@ class AuthenticateAsAnyoneController extends Controller
 {
     public function index()
     {
-        $models = [];
-        foreach (config('auth.guards') as $key => $guard)
-        {
-            if (!in_array($key, config('AuthenticateAsAnyoneConfig.excepts')))
-            {
-                $models[] = config('auth.providers')[$guard['provider']]['model'];
-            }
-        }
-
         $data = collect();
-        foreach ($models as $model)
-        {
-            $instance = new $model;
+
+        foreach (config('auth-as-anyone.models') as $modelName => $modelData) {
+            $pathModel = $modelData['namespace'].'\\'.$modelName;
+            $instance = new $pathModel;
+            $modelCollection = $instance->paginate(10);
+
+            $nameAttribute = $modelData['columns']['name'];
+            $firstNameAttribute = $modelData['columns']['firstname'];
+            $loginAttribute = $modelData['columns']['login'];
+
+            foreach ($modelCollection as $modelCollectionValue) {
+                $modelCollectionValue->aaaName = $modelCollectionValue->$nameAttribute;
+                $modelCollectionValue->aaaFirstName = $modelCollectionValue->$firstNameAttribute;
+                $modelCollectionValue->aaaLogin = $modelCollectionValue->$loginAttribute;
+            }
+
             $data->push((object) [
-                'models' => $instance->all(),
-                'name' => $model,
+                'models' => $modelCollection,
+                'prettyName' => $modelData['pretty-name'],
             ]);
         }
 

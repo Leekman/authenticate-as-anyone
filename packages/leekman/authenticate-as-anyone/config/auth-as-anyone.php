@@ -6,37 +6,37 @@ return [
         [
             'auth',
         ],
-    'models-path' => 'App\Models',
     'models' =>
         [
-            [
-                'User' =>
-                    [
-                        'columns' => [
-                            'name' => 'name',
-                            'firstname' => 'firstname',
-                            'login' => 'email',
-                        ],
-                        'model-pretty-name' => 'Users',
+            'User' =>
+                [
+                    'namespace' => 'App\Models',
+                    'columns' => [
+                        'name' => 'name',
+                        'firstname' => 'firstname',
+                        'login' => 'email',
                     ],
-                'Admin' =>
-                    [
-                        'columns' => [
-                            'name' => 'nom',
-                            'firstname' => 'prenom',
-                            'login' => 'email',
-                        ],
-                        'model-pretty-name' => 'Administrators',
+                    'pretty-name' => 'Users',
+                ],
+            'Admin' =>
+                [
+                    'namespace' => 'App\Models',
+                    'columns' => [
+                        'name' => 'nom_admin',
+                        'firstname' => 'prenom_admin',
+                        'login' => 'email',
                     ],
-                'Owner' =>
-                    [
-                        'columns' => [
-                            'name' => 'nom_utilisateur',
-                            'firstname' => 'prenom_utilisateur',
-                            'login' => 'email',
-                        ],
-                        'model-pretty-name' => 'Owners',
+                    'pretty-name' => 'Administrators',
+                ],
+            'Owner' =>
+                [
+                    'namespace' => 'App\Models',
+                    'columns' => [
+                        'name' => 'nom_utilisateur',
+                        'firstname' => 'prenom_utilisateur',
+                        'login' => 'email',
                     ],
-            ],
+                    'pretty-name' => 'Owners',
+                ],
         ],
 ];

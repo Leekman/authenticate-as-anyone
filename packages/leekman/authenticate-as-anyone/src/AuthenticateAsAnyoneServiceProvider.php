@@ -14,7 +14,7 @@ class AuthenticateAsAnyoneServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/auth-as-anyone.php', 'AuthAsAnyone');
+        $this->mergeConfigFrom(__DIR__.'/../config/auth-as-anyone.php', 'auth-as-anyone');
 
         include __DIR__.'/routes.php';
     }
