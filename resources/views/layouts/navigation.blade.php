@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('authenticate-as-anyone.index')" :active="request()->routeIs('authenticate-as-anyone')">
+                        Authenticate
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -10,8 +10,10 @@ return [
         [
             'User' =>
                 [
+                    'guard' => 'web',
                     'namespace' => 'App\Models',
                     'columns' => [
+                        'id' => 'id',
                         'name' => 'name',
                         'firstname' => 'firstname',
                         'login' => 'email',
@@ -20,8 +22,10 @@ return [
                 ],
             'Admin' =>
                 [
+                    'guard' => 'admin',
                     'namespace' => 'App\Models',
                     'columns' => [
+                        'id' => 'id',
                         'name' => 'nom_admin',
                         'firstname' => 'prenom_admin',
                         'login' => 'email',
@@ -30,8 +34,10 @@ return [
                 ],
             'Owner' =>
                 [
+                    'guard' => 'owner',
                     'namespace' => 'App\Models',
                     'columns' => [
+                        'id' => 'id',
                         'name' => 'nom_utilisateur',
                         'firstname' => 'prenom_utilisateur',
                         'login' => 'email',

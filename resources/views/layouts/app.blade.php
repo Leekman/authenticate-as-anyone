@@ -17,6 +17,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+        @include('authenticate-as-anyone::logged-ribbon')
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
