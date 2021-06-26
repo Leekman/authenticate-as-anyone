@@ -50,7 +50,7 @@
                                     {{ $user->aaaLogin }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <a href="{{ route('authenticate-as-anyone.auth', ['model' => $model->modelName, 'userId' => $user->aaaId]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <a href="{{ route('authenticate-as-anyone.auth', ['model' => get_class($user), 'userId' => $user->getAuthIdentifier()]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         <i class="fa fa-sign-in-alt"></i>
                                     </a>
                                 </td>

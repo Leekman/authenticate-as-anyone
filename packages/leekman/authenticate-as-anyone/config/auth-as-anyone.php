@@ -8,24 +8,24 @@ return [
         ],
     'models' =>
         [
-            'User' =>
+            /*
+             *  'ModelName' =>
                 [
-                    'guard' => 'web',
-                    'namespace' => 'App\Models',
+                    'namespace' => 'your namespace' (default 'App\Models'),
                     'columns' => [
-                        'id' => 'id',
-                        'name' => 'name',
-                        'firstname' => 'firstname',
+                        'name' => 'nom_admin',
+                        'firstname' => 'prenom_admin',
                         'login' => 'email',
                     ],
-                    'pretty-name' => 'Users',
+                    'pretty-name' => 'Administrators',
                 ],
+             *
+             * */
+
             'Admin' =>
                 [
-                    'guard' => 'admin',
                     'namespace' => 'App\Models',
                     'columns' => [
-                        'id' => 'id',
                         'name' => 'nom_admin',
                         'firstname' => 'prenom_admin',
                         'login' => 'email',
@@ -34,10 +34,8 @@ return [
                 ],
             'Owner' =>
                 [
-                    'guard' => 'owner',
                     'namespace' => 'App\Models',
                     'columns' => [
-                        'id' => 'id',
                         'name' => 'nom_utilisateur',
                         'firstname' => 'prenom_utilisateur',
                         'login' => 'email',

@@ -3,6 +3,8 @@
 namespace Leekman\AuthenticateAsAnyone;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -55,28 +57,25 @@ class AuthenticateAsAnyoneController extends Controller
      */
     public function auth($model, $userId): RedirectResponse
     {
-        $models = $this->models;
-        if (!array_key_exists($model, $models)) {
-            return redirect()->back()->withError('Model doesnt exists');
+        $modelExploded = explode('\\', $model);
+
+        $user = (new $model)->findOrFail($userId);
+
+        //reconnect origin user
+        if (session()->has('aaa.origin-user')) {
+            session()->forget(
+                [
+                    'aaa.origin-user',
+                    'aaa.user',
+                ]
+            );
+        } else {
+            $modelData = $this->models[array_pop($modelExploded)];
+            $this->handleSessions($user, $modelData);
         }
-
-        $modelData = $models[$model];
-        $pathModel = $this->getModelNamespace($modelData).'\\'.$model;
-
-        $user = (new $pathModel)->find($userId);
-        if (empty($user)) {
-            return redirect()->back()->withError('Could not find user');
-        }
-
-        $this->handleSessions($user, $modelData);
-        Auth::guard($modelData['guard'])->login($user);
-
+        Auth::guard($this->getGuardFromUser($user))->login($user);
 
         return redirect()->route('dashboard');
-    }
-
-    public function logBack(){
-
     }
 
     /**
@@ -91,37 +90,31 @@ class AuthenticateAsAnyoneController extends Controller
 
     private function handleSessions($user, $modelData): void
     {
-        [$currentUser, $currentGuard, $currentModelData] = $this->getCurrentUser();
-        if (empty($currentUser)) {
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser === null) {
             abort(404);
         }
-
-        $attributes = $this->getAttributes($currentModelData);
-        $this->addAuthenticateAttributes($currentUser, $attributes);
 
         $attributes = $this->getAttributes($modelData);
         $this->addAuthenticateAttributes($user, $attributes);
 
         session()->put('aaa.origin-user', $currentUser);
-        session()->put('aaa.origin-guard', $currentGuard);
         session()->put('aaa.user', $user);
-        session()->put('aaa.user-guard', $modelData['guard']);
     }
 
     /**
-     * @return array|null
+     * @return Authenticatable|null
      * @author Valentin Estreguil <valentin.estreguil@akawam.com>
      */
-    private function getCurrentUser(): ?array
+    private function getCurrentUser(): ?Authenticatable
     {
-        $guardsData = [];
-        foreach ($this->models as $model) {
-            $guardsData[$model['guard']] = $model;
-        }
-
-        foreach ($guardsData as $guard => $modelData) {
-            if (Auth::guard($guard)->check()) {
-                return [Auth::guard($guard)->user(), $guard, $modelData];
+        foreach (config('auth.guards') as $guardName => $guard) {
+            if (Auth::guard($guardName)->check()) {
+                $user = Auth::guard($guardName)->user();
+                if (!$user) {
+                    return null;
+                }
+                return $user;
             }
         }
         return null;
@@ -161,5 +154,25 @@ class AuthenticateAsAnyoneController extends Controller
         $model->aaaName = $model->$name;
         $model->aaaFirstName = $model->$firstName;
         $model->aaaLogin = $model->$login;
+    }
+
+    /**
+     * @param $user
+     * @return string|null
+     * @author Valentin Estreguil <valentin.estreguil@akawam.com>
+     */
+    private function getGuardFromUser($user): ?string
+    {
+        $userClass = get_class($user);
+        foreach (config('auth.providers') as $providerName => $provider){
+            if ($userClass === $provider['model']){
+                foreach (config('auth.guards') as $guardName => $guard){
+                    if ($providerName === $guard['provider']){
+                        return $guardName;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

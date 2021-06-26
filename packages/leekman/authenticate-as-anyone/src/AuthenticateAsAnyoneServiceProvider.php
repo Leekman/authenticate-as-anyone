@@ -3,6 +3,7 @@
 namespace Leekman\AuthenticateAsAnyone;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AuthenticateAsAnyoneServiceProvider extends ServiceProvider
@@ -51,5 +52,9 @@ class AuthenticateAsAnyoneServiceProvider extends ServiceProvider
             $publishPath = base_path('resources/views/vendor/auth-as-anyone');
         }
         $this->publishes([$viewPath => $publishPath]);
+
+        Blade::directive('aaaLogged', function(){
+            return "<?php echo view('authenticate-as-anyone::logged-ribbon')->render(); ?>";
+        });
     }
 }
