@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'banner-color' => '',
     'route-prefix' => 'authenticate-as-anyone',
     'middlewares' =>
         [

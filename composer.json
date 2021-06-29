@@ -1,7 +1,8 @@
 {
     "name": "leekman/authenticate-as-anyone",
     "description": "Package that allows you to authenticate as anyone, see readme for more informations",
-    "require": {},
+    "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Leekman",
@@ -15,5 +16,13 @@
                 "Leekman\\AuthenticateAsAnyone\\AuthenticateAsAnyoneServiceProvider"
             ]
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Leekman\\AuthenticateAsAnyone\\": "src"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0"
     }
 }
